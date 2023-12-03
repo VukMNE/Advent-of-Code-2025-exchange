@@ -1,10 +1,11 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,13 +75,14 @@ public class Y23Day03 {
 		}
 		@Override public Iterator<Y23Day03.Pos> iterator() { return positions().iterator(); }
 		@Override public String toString() { return "["+from.toString()+"->"+to.toString()+"]"; }
+		public boolean contains(Pos pos) { return from.x<=pos.x && from.y<=pos.y && pos.x<=to.x && pos.y<=to.y; }
 	}
 	
 	static record PartNumber(int num, Range range) {}
 	
 	
 	static class World {
-		Map<Pos, Character> symbolPositions = new HashMap<>();
+		Map<Pos, Character> symbolPositions = new LinkedHashMap<>();
 		List<PartNumber> partNumbers = new ArrayList<>();
 		public void addSymbol(String symbol, int x, int y) {
 			symbolPositions.put(new Pos(x,y), symbol.charAt(0));
@@ -100,6 +102,23 @@ public class Y23Day03 {
 				}
 			}
 			return result;
+		}
+		public int calcSumGearRatio() {
+			int result = 0;
+			for (Entry<Pos, Character> entry:symbolPositions.entrySet()) {
+				if (entry.getValue() != '*') {
+					continue;
+				}
+				List<PartNumber> adjacentPartNumbers = findPartNumbersInRang(entry.getKey());
+				if (adjacentPartNumbers.size() == 2) {
+					int ratio = adjacentPartNumbers.get(0).num * adjacentPartNumbers.get(1).num;
+					result += ratio;
+				}
+			}
+			return result;
+		}
+		private List<PartNumber> findPartNumbersInRang(Pos pos) {
+			return partNumbers.stream().filter(pn -> pn.range.contains(pos)).toList();
 		}
 	}
 	
@@ -131,6 +150,28 @@ public class Y23Day03 {
 
 	
 	public static void mainPart2(String inputFile) {
+        Pattern tokenPattern = Pattern.compile(INPUT_TOKEN);
+        int y = 0;
+        World world = new World();
+		for (InputData data:new InputProcessor(inputFile)) {
+			System.out.println("ROW "+y+": "+data);
+
+	        Matcher matcher = tokenPattern.matcher(data.row);
+	        while(matcher.find()) {
+	        	String value = data.row.substring(matcher.start(), matcher.end());
+	        	int x = matcher.start();
+	            System.out.println("found: " + value + " at ("+x+","+y+")");
+	            if ((value.charAt(0) >= '0') && (value.charAt(0) <= '9')) {
+	            	world.addNumber(value, x, y);
+	            }
+	            else {
+	            	world.addSymbol(value, x, y);
+	            }
+	        }
+	        y++;
+		}
+		int sum = world.calcSumGearRatio();
+		System.out.println(sum);
 	}
 
 	
@@ -141,8 +182,8 @@ public class Y23Day03 {
 		mainPart1("exercises/day03/Feri/input.txt");
 		System.out.println("---------------");
 		System.out.println("--- PART II ---");
-		mainPart2("exercises/day03/Feri/input-example.txt");
-//		mainPart2("exercises/day03/Feri/input.txt");     
+//		mainPart2("exercises/day03/Feri/input-example.txt");
+		mainPart2("exercises/day03/Feri/input.txt");     
 		System.out.println("---------------");    // 
 	}
 	
