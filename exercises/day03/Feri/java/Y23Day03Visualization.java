@@ -146,8 +146,10 @@ public class Y23Day03Visualization {
 	
 	public static class Visualization {
 		Y23GUIOutput03 output;
-		public Visualization(String title) {
-			output = new Y23GUIOutput03(title, true);
+		boolean markStars;
+		public Visualization(String title, boolean markStars) {
+			this.output = new Y23GUIOutput03(title, true);
+			this.markStars = markStars;
 		}
         List<String> inputRows = new ArrayList<>();
         Set<Pos> markedPositions = new HashSet<>();
@@ -159,6 +161,9 @@ public class Y23Day03Visualization {
 				for (int x=0; x<line.length(); x++) {
 					char c = line.charAt(x);
 					String color = (c != '.') && markedPositions.contains(new Pos(x,y)) ? "byellow" : "b0";
+					if (markStars && c == '*' && markedPositions.contains(new Pos(x,y))) {
+						color = "bred";
+					}
 					if (!lastColor.equals(color)) {
 						lastColor = color;
 						result.append(output.style(color));
@@ -173,7 +178,7 @@ public class Y23Day03Visualization {
 	static Visualization vis;
 	
 	public static void mainPart1(String inputFile) {
-        vis = new Visualization("2023 Day 03 Part I");
+        vis = new Visualization("2023 Day 03 Part I", false);
         Pattern tokenPattern = Pattern.compile(INPUT_TOKEN);
         int y = 0;
         World world = new World();
@@ -202,7 +207,7 @@ public class Y23Day03Visualization {
 
 	
 	public static void mainPart2(String inputFile) {
-        vis = new Visualization("2023 Day 03 Part II");
+        vis = new Visualization("2023 Day 03 Part II", true);
         Pattern tokenPattern = Pattern.compile(INPUT_TOKEN);
         int y = 0;
         World world = new World();
