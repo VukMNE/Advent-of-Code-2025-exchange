@@ -109,6 +109,7 @@ public class Y23Day03Visualization {
 		}
 		public List<PartNumber> searchValidParts() {
 			List<PartNumber> result = new ArrayList<>(); 
+			vis.show();
 			for (PartNumber partNumber:partNumbers) {
 				for (Pos pos:partNumber.range) {
 					if (symbolPositions.containsKey(pos)) {
@@ -241,8 +242,8 @@ public class Y23Day03Visualization {
 //		mainPart1("exercises/day03/Feri/input.txt");
 		System.out.println("---------------");
 		System.out.println("--- PART II ---");
-//		mainPart2("exercises/day03/Feri/input-example.txt");
-		mainPart2("exercises/day03/Feri/input.txt");     
+		mainPart2("exercises/day03/Feri/input-example.txt");
+//		mainPart2("exercises/day03/Feri/input.txt");     
 		System.out.println("---------------");    // 
 	}
 	

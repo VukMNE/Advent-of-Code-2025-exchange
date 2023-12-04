@@ -174,7 +174,7 @@ public class Y23Day02Visualization {
 			inputLines.add(line);
 			maxLineLength = Math.max(maxLineLength, line.length());
 		}
-		output.addStep(show(outputLines, inputLines));
+		output.addStep(show(outputLines, inputLines, output.color("gray")));
 		for (InputData data:new InputProcessor(inputFile)) {
 			String line = data.toColoredString(maxDicesPerColor, output.style("bred"), output.color("gray"));
 			String orig = inputLines.remove(0);
@@ -189,15 +189,15 @@ public class Y23Day02Visualization {
 			}
 			line = line + output.color("gray");
 			outputLines.add(line);
-			output.addStep(show(outputLines, inputLines));
+			output.addStep(show(outputLines, inputLines, output.color("gray")));
 		}
 		System.out.println("SUM VALID GAME IDs: "+sumValidGameIDs);
 	}
 
 
-	private static String show(List<String> outputLines, List<String> inputLines) {
+	private static String show(List<String> outputLines, List<String> inputLines, String outputColor) {
 		StringBuilder result = new StringBuilder();
-		result.append(output.color("darkgray"));
+		result.append(outputColor);
 		for (String outputLine:outputLines) {
 			result.append(outputLine).append("\n");
 		}
@@ -220,7 +220,7 @@ public class Y23Day02Visualization {
 			inputLines.add(line);
 			maxLineLength = Math.max(maxLineLength, line.length());
 		}
-		output.addStep(show(outputLines, inputLines));
+		output.addStep(show(outputLines, inputLines, output.color("darkgray")));
 		for (InputData data:new InputProcessor(inputFile)) {
 			Map<DCOLOR, Integer> maxDicesPerColor = new HashMap<>();
 			maxDicesPerColor.put(DCOLOR.red, 0);
@@ -244,7 +244,7 @@ public class Y23Day02Visualization {
 			line += nLen(red,2)+" x "+nLen(green,2)+" x "+nLen(blue,2)+" = " + nLen(setValue,4) +"   "+ nLen(sumSetValues,6);
 			line = line + output.color("darkgray");
 			outputLines.add(line);
-			output.addStep(show(outputLines, inputLines));
+			output.addStep(show(outputLines, inputLines, output.color("darkgray")));
 		}
 		System.out.println("SUM SET VALUES: "+sumSetValues);
 	}
@@ -257,8 +257,8 @@ public class Y23Day02Visualization {
 //		mainPart1("exercises/day02/Feri/input.txt", 12, 13, 14);
 		System.out.println("---------------");
 		System.out.println("--- PART II ---");
-//		mainPart2("exercises/day02/Feri/input-example.txt");
-		mainPart2("exercises/day02/Feri/input.txt");     
+		mainPart2("exercises/day02/Feri/input-example.txt");
+//		mainPart2("exercises/day02/Feri/input.txt");     
 		System.out.println("---------------");    // 
 	}
 	
