@@ -394,8 +394,8 @@ public class Y23Day05 {
 		mainPart1("exercises/day05/Feri/input.txt");             
 		System.out.println("---------------");
 		System.out.println("--- PART II ---");
-//		mainPart2("exercises/day05/Feri/input-example.txt");
-		mainPart2("exercises/day05/Feri/input.txt");     
+		mainPart2("exercises/day05/Feri/input-example.txt");
+//		mainPart2("exercises/day05/Feri/input.txt");     
 		System.out.println("---------------");    // 
 	}
 	
