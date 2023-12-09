@@ -27,8 +27,6 @@ def solve2(filename):
 
     ghosts = list( map( lambda node: (0,node[0]),filter(lambda node:node[0][-1]=='A',nodelist)) )
     print(ghosts)
-    #ghosts = ghosts[0:5]
-    #print(ghosts)
 
     def findnextz2(ghost):
         d=0
@@ -60,7 +58,22 @@ def solve2(filename):
                 ghosts[i]=findnextz(ghosts[i])
             maxstep = ghosts[i][0]
 
-    print(ghosts)
+    print(maxstep)
+    print("cache: " + str(cache))
+    '''
+    (0, 'GQA'): (22411, 'TKZ'), 
+    (0, 'TKZ'): (22411, 'TKZ'), 
+    (0, 'AAA'): (18727, 'ZZZ'), 
+    (0, 'ZZZ'): (18727, 'ZZZ'), 
+    (0, 'XCA'): (24253, 'LLZ'), 
+    (0, 'LLZ'): (24253, 'LLZ'), 
+    (0, 'HBA'): (14429, 'JLZ'), 
+    (0, 'JLZ'): (14429, 'JLZ'), 
+    (0, 'GVA'): (16271, 'KJZ'), 
+    (0, 'KJZ'): (16271, 'KJZ'), 
+    (0, 'NVA'): (20569, 'HVZ'), 
+    (0, 'HVZ'): (20569, 'HVZ'), 
+    '''
 
 
 solve2("sample.txt")
