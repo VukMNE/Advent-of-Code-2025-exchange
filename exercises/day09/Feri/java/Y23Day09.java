@@ -19,7 +19,7 @@ public class Y23Day09 {
 	 * 
 	 */
 
-	private static final String INPUT_RX = "^([0-9- ]+)$";
+	private static final String INPUT_RX = "^([0-9 -]+)$";
 	
 	public static record InputData(List<Long> sequence) {
 	}
