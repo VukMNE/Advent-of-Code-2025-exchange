@@ -70,8 +70,13 @@ public class Y23Day13 {
 		List<String> field;
 		int maxX;
 		int maxY;
+		int toggleX;
+		int toggleY;
 		public World() {
 			field = new ArrayList<>();
+			toggleX = -1;
+			toggleY = -1;
+
 		}
 		public boolean addRow(String row) {
 			if (row.isEmpty()) {
@@ -97,11 +102,19 @@ public class Y23Day13 {
 			return result.toString();
 		}
 		char get(int x, int y) {
-			return field.get(y).charAt(x);
+			char c = field.get(y).charAt(x);
+			if ((x == toggleX) && (y == toggleY)) {
+				c = (c=='#') ? '.' : '#';
+			}
+			return c; 
 		}
 
 		String getRow(int row) {
-			return field.get(row);
+			StringBuilder result = new StringBuilder();
+			for (int x=0; x<maxX; x++) {
+				result.append(get(x,row));
+			}
+			return result.toString();
 		}
 		
 		String getColumn(int col) {
@@ -120,8 +133,11 @@ public class Y23Day13 {
 		}
 
 		private int findMirrorVLine() {
+			return findMirrorVLine(-1);
+		}
+		private int findMirrorVLine(int ignore) {
 			for (int mirrorCol=1; mirrorCol<maxX; mirrorCol++) {
-				boolean ok = true;
+				boolean ok = mirrorCol != ignore;
 				for (int checkDist=0; checkDist<maxX-mirrorCol; checkDist++) {
 					if (mirrorCol-1-checkDist<0) {
 						break;
@@ -140,8 +156,11 @@ public class Y23Day13 {
 		}
 		
 		private int findMirrorHLine() {
+			return findMirrorHLine(-1);
+		}
+		private int findMirrorHLine(int ignore) {
 			for (int mirrorRow=1; mirrorRow<maxY; mirrorRow++) {
-				boolean ok = true;
+				boolean ok = mirrorRow != ignore;
 				for (int checkDist=0; checkDist<maxY-mirrorRow; checkDist++) {
 					if (mirrorRow-1-checkDist<0) {
 						break;
@@ -178,6 +197,34 @@ public class Y23Day13 {
 			return resultV;
 		}
 
+		public int findUnsmudgedMirrorLine() {
+			toggleX = -1;
+			toggleY = -1;
+			int skipResultV = findMirrorVLine();
+			int skipResultH = findMirrorHLine();
+			for (int y=0; y<maxY; y++) {
+				toggleY = y;
+				for (int x=0; x<maxX; x++) {
+					toggleX = x;
+					int resultV = findMirrorVLine(skipResultV);
+					int resultH = findMirrorHLine(skipResultH);
+					if ((resultH!=-1) && (resultV!=-1)) {
+						System.out.println("-- T --");
+						System.out.println(toTString());
+						throw new RuntimeException("two matches!");
+					}
+					if (resultH!=-1) {
+						return 100*resultH;
+					}
+					if (resultV!=-1) {
+						return resultV;
+					}
+				}
+			}
+			System.out.println("-- T --");
+			System.out.println(toTString());
+			throw new RuntimeException("no smudge matches!");
+		}
 
 	}
 
@@ -203,6 +250,23 @@ public class Y23Day13 {
 	
 	
 	public static void mainPart2(String inputFile) {
+		World world = new World();
+		int sum = 0;
+		for (InputData data:new InputProcessor(inputFile)) {
+			System.out.println(data);
+			if (world.addRow(data.row)) {
+				System.out.println("---");
+				System.out.println(world.toString()); 
+				sum += world.findUnsmudgedMirrorLine();
+				System.out.println("---");
+				world = new World(); 
+			}
+		}
+		System.out.println("---");
+		world.addRow("");
+		System.out.println(world.toString()); 
+		sum += world.findUnsmudgedMirrorLine();
+		System.out.println("SUM: "+sum);
 	}
 
 
@@ -212,8 +276,8 @@ public class Y23Day13 {
 		mainPart1("exercises/day13/Feri/input.txt");               
 		System.out.println("---------------");                           
 		System.out.println("--- PART II ---");
-		mainPart2("exercises/day13/Feri/input-example.txt");
-//		mainPart2("exercises/day13/Feri/input.txt");              
+//		mainPart2("exercises/day13/Feri/input-example.txt");
+		mainPart2("exercises/day13/Feri/input.txt");              
 		System.out.println("---------------");    //
 	}
 	
