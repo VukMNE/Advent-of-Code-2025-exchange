@@ -208,6 +208,67 @@ public class Y23Day17 {
 				}
 			}
 		}
+		private List<Move> createUltraHorizontalMoves(int x, int y) {
+			List<Move> result = new ArrayList<>();
+			int heatLossForward = 0;
+			int heatLossBackward = 0;
+			for (int dx=1; dx<=3; dx++) {
+				if (isValidPos(x+dx, y)) {
+					heatLossForward += get(x+dx, y);
+				}
+				if (isValidPos(x-dx, y)) {
+					heatLossBackward += get(x-dx, y);
+				}
+			}
+			for (int dx=4; dx<=10; dx++) {
+				if (isValidPos(x+dx, y)) {
+					Pos targetPos = new Pos(x+dx, y, Z_VERTICAL);
+					heatLossForward += get(x+dx, y);
+					result.add(new Move(targetPos, heatLossForward));
+				}
+				if (isValidPos(x-dx, y)) {
+					Pos targetPos = new Pos(x-dx, y, Z_VERTICAL);
+					heatLossBackward += get(x-dx, y);
+					result.add(new Move(targetPos, heatLossBackward));
+				}
+			}
+			return result;
+		}
+		private List<Move> createUltraVerticalMoves(int x, int y) {
+			List<Move> result = new ArrayList<>();
+			int heatLossForward = 0;
+			int heatLossBackward = 0;
+			for (int dy=1; dy<=3; dy++) {
+				if (isValidPos(x, y+dy)) {
+					heatLossForward += get(x, y+dy);
+				}
+				if (isValidPos(x, y-dy)) {
+					heatLossBackward += get(x, y-dy);
+				}
+			}
+			for (int dy=4; dy<=10; dy++) {
+				if (isValidPos(x, y+dy)) {
+					Pos targetPos = new Pos(x, y+dy, Z_HORIZONTAL);
+					heatLossForward += get(x, y+dy);
+					result.add(new Move(targetPos, heatLossForward));
+				}
+				if (isValidPos(x, y-dy)) {
+					Pos targetPos = new Pos(x, y-dy, Z_HORIZONTAL);
+					heatLossBackward += get(x, y-dy);
+					result.add(new Move(targetPos, heatLossBackward));
+				}
+			}
+			return result;
+		}
+		public void createUltraHeatlossDirectionGraph() {
+			heatlossDirections = new LinkedHashMap<>();
+			for (int y=0; y<maxY; y++) {
+				for (int x=0; x<maxX; x++) {
+					heatlossDirections.put(new Pos(x,y,Z_HORIZONTAL), createUltraHorizontalMoves(x,y));
+					heatlossDirections.put(new Pos(x,y,Z_VERTICAL), createUltraVerticalMoves(x,y));
+				}
+			}
+		}
 		public String showMinimalMoves() {
 			StringBuilder result = new StringBuilder();
 			for (int y=0; y<maxY; y++) {
@@ -272,17 +333,27 @@ public class Y23Day17 {
 	}
 
 	public static void mainPart2(String inputFile) {
+//		output = new Y23GUIOutput17("2023 day 17 Part I", true);
+		World world = new World();
+		for (InputData data:new InputProcessor(inputFile)) {
+			world.addRow(data.row);
+		}
+		world.init();
+		System.out.println(world);
+		world.createUltraHeatlossDirectionGraph();
+		int heatLoss = world.findMinimalHeatLoss();
+		System.out.println("MINIMAL HEATLOSS: "+heatLoss);		
 	}
 
 
 	public static void main(String[] args) throws FileNotFoundException {
 		System.out.println("--- PART I ---");
 //		mainPart1("exercises/day17/Feri/input-example.txt");
-		mainPart1("exercises/day17/Feri/input.txt");               
+//		mainPart1("exercises/day17/Feri/input.txt");               
 		System.out.println("---------------");                           
 		System.out.println("--- PART II ---");
-		mainPart2("exercises/day17/Feri/input-example.txt");
-//		mainPart2("exercises/day17/Feri/input.txt");
+//		mainPart2("exercises/day17/Feri/input-example.txt");
+		mainPart2("exercises/day17/Feri/input.txt");
 		System.out.println("---------------");    
 	}
 	
