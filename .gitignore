@@ -44,3 +44,5 @@ ipch
 
 # Python Files
 __pycache__
+/exchange/day01/Dimitris Kostorrizos/Y25Day01/.vs
+/exchange/day01/Dimitris Kostorrizos/Y25Day01/obj
